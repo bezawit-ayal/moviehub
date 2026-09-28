@@ -1,9 +1,9 @@
 import MovieSkeleton from './movieskeleton';
-import './moviegrid.css';
+import './skeletongrid.css';
 
 function SkeletonGrid({ count = 10 }) {
     return (
-        <div className="movie-grid">
+        <div className="skeleton-grid">
             {Array.from({ length: count }).map((_, index) => (
                 <MovieSkeleton key={index} />
             ))}

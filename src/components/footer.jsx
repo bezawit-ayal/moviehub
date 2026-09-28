@@ -13,7 +13,7 @@ function Footer() {
 
     return (
         <footer className="footer">
-            <div className="footer-container">
+            <div className="footer-container container">
 
                 <div className="footer-top">
                     <div className="footer-brand">

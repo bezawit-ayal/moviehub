@@ -31,7 +31,7 @@ function Navbar() {
 
     return (
         <header className="navbar">
-            <div className="navbar-container">
+            <div className="navbar-container container">
 
                 <Link
                     to="/"
@@ -48,10 +48,6 @@ function Navbar() {
 
                     <NavLink to="/discover" onClick={closeMenu}>
                         Discover
-                    </NavLink>
-
-                    <NavLink to="/watchlist" onClick={closeMenu}>
-                        Watchlist
                     </NavLink>
                 </nav>
 

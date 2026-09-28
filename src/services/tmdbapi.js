@@ -3,6 +3,13 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 const fetchFromTMDB = async (endpoint) => {
+    if (!API_KEY) {
+        throw new Error(
+            'Missing VITE_TMDB_API_KEY. Copy .env.example to .env ' +
+            'and add your TMDB API key.'
+        );
+    }
+
     const separator = endpoint.includes('?') ? '&' : '?';
 
     const response = await fetch(
@@ -30,7 +37,7 @@ export const getUpcomingMovies = () =>
 
 export const searchMovies = (query, page = 1) =>
     fetchFromTMDB(
-        `/search/movie?query=${encodeURIComponent(query)}&page=${page}&include_adult=false`
+        `/search/movie?query=${encodeURIComponent(query)}&page=${encodeURIComponent(page)}&include_adult=false`
     );
 
 export const getMovieGenres = () =>
@@ -43,19 +50,20 @@ export const getMoviesByGenre = (
     rating = ''
 ) => {
     let endpoint =
-        `/discover/movie?page=${page}` +
+        `/discover/movie?page=${encodeURIComponent(page)}` +
         `&sort_by=popularity.desc`;
 
     if (genreId) {
-        endpoint += `&with_genres=${genreId}`;
+        endpoint += `&with_genres=${encodeURIComponent(genreId)}`;
     }
 
     if (year) {
-        endpoint += `&primary_release_year=${year}`;
+        endpoint +=
+            `&primary_release_year=${encodeURIComponent(year)}`;
     }
 
     if (rating) {
-        endpoint += `&vote_average.gte=${rating}`;
+        endpoint += `&vote_average.gte=${encodeURIComponent(rating)}`;
     }
 
     return fetchFromTMDB(endpoint);

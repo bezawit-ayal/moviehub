@@ -1,0 +1,33 @@
+.errorboundary-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.errorboundary-content {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.errorboundary-content h1 {
+    margin-bottom: var(--space-sm);
+}
+
+.errorboundary-description {
+    max-width: 420px;
+    margin: 0 auto var(--space-lg);
+    line-height: 1.6;
+}
+
+.errorboundary-link {
+    margin-top: var(--space-md);
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+.errorboundary-link:hover {
+    color: var(--primary);
+}

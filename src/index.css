@@ -67,14 +67,12 @@ img {
   margin: 0 auto;
 }
 
-.section {
-  padding: var(--space-xl) 0;
-}
-
-.section-title {
-  font-size: 28px;
+.section-label {
+  margin-bottom: var(--space-xs);
+  color: var(--primary);
+  font-size: 12px;
   font-weight: 700;
-  margin-bottom: var(--space-md);
+  letter-spacing: 1.5px;
 }
 
 .primary-button {
@@ -107,22 +105,71 @@ img {
   border-color: var(--text-secondary);
 }
 
+/* Pagination (shared by search + discover) */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  margin-top: 40px;
+  padding-bottom: 20px;
+}
+
+.pagination-button {
+  min-width: 100px;
+  height: 42px;
+
+  padding: 0 16px;
+
+  background: var(--surface);
+  color: var(--text-primary);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: var(--surface-light);
+  border-color: var(--primary);
+}
+
+.pagination-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  color: var(--text-secondary);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
 @media (max-width: 768px) {
   .container {
     width: min(100% - 24px, 1200px);
   }
-
-  .section {
-    padding: var(--space-lg) 0;
-  }
-
-  .section-title {
-    font-size: 24px;
-  }
 }
 
 @media (max-width: 480px) {
-  .section-title {
-    font-size: 21px;
+  .pagination {
+    gap: 8px;
+  }
+
+  .pagination-button {
+    min-width: 85px;
+    padding: 0 10px;
+  }
+
+  .pagination-info {
+    font-size: 12px;
   }
 }
