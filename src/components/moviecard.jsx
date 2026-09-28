@@ -1,49 +1,70 @@
-import { Star } from 'lucide-react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Star, ImageOff } from 'lucide-react';
+import { posterUrl } from '../services/tmdbapi';
+import WatchlistButton from './watchlistbutton';
 import './moviecard.css';
 
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+const getYear = (releaseDate) =>
+    releaseDate ? releaseDate.substring(0, 4) : 'N/A';
+
+const getRating = (voteAverage) =>
+    voteAverage ? voteAverage.toFixed(1) : 'N/A';
 
 function MovieCard({ movie }) {
-    const poster = movie.poster_path
-        ? `${IMAGE_BASE_URL}${movie.poster_path}`
-        : null;
+    const [imageFailed, setImageFailed] = useState(false);
 
-    const releaseYear = movie.release_date
-        ? movie.release_date.substring(0, 4)
-        : 'N/A';
+    const poster = posterUrl(movie.poster_path, 'w342');
 
-    const rating = movie.vote_average
-        ? movie.vote_average.toFixed(1)
-        : 'N/A';
+    const showImage = poster && !imageFailed;
 
     return (
         <article className="movie-card">
             <div className="movie-card-poster">
-                {poster ? (
-                    <img
-                        src={poster}
-                        alt={movie.title}
-                        loading="lazy"
-                    />
-                ) : (
-                    <div className="movie-card-placeholder">
-                        No Image
-                    </div>
-                )}
+                <Link
+                    to={`/movie/${movie.id}`}
+                    className="movie-card-link"
+                    aria-label={movie.title}
+                >
+                    {showImage ? (
+                        <img
+                            src={poster}
+                            alt={movie.title}
+                            loading="lazy"
+                            decoding="async"
+                            onError={() => setImageFailed(true)}
+                        />
+                    ) : (
+                        <div className="movie-card-placeholder">
+                            <ImageOff size={22} />
+                            <span>No poster</span>
+                        </div>
+                    )}
+
+                    <span className="movie-card-overlay">
+                        View details
+                    </span>
+                </Link>
+
+                <div className="movie-card-save">
+                    <WatchlistButton movie={movie} />
+                </div>
             </div>
 
             <div className="movie-card-content">
                 <h3 className="movie-card-title">
-                    {movie.title}
+                    <Link to={`/movie/${movie.id}`}>
+                        {movie.title}
+                    </Link>
                 </h3>
 
                 <div className="movie-card-meta">
                     <span className="movie-rating">
                         <Star size={14} fill="currentColor" />
-                        {rating}
+                        {getRating(movie.vote_average)}
                     </span>
 
-                    <span>{releaseYear}</span>
+                    <span>{getYear(movie.release_date)}</span>
                 </div>
             </div>
         </article>

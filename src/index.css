@@ -14,6 +14,8 @@
   --border: #2a2a2a;
 
   --success: #22c55e;
+  --rating: #f5c518;
+  --danger: #ef4444;
 
   --space-xs: 8px;
   --space-sm: 16px;
@@ -40,6 +42,17 @@ body {
   background: var(--background);
   color: var(--text-primary);
   min-width: 320px;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 button,
@@ -76,6 +89,11 @@ img {
 }
 
 .primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   background: var(--primary);
   color: var(--text-primary);
   border: none;
@@ -85,12 +103,17 @@ img {
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.primary-button:hover {
+.primary-button:hover:not(:disabled) {
   background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
 .secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   background: transparent;
   color: var(--text-primary);
   border: 1px solid var(--border);
@@ -100,12 +123,19 @@ img {
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.secondary-button:hover {
+.secondary-button:hover:not(:disabled) {
   background: var(--surface-light);
   border-color: var(--text-secondary);
 }
 
-/* Pagination (shared by search + discover) */
+.primary-button:disabled,
+.secondary-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Pagination (shared by search) */
 
 .pagination {
   display: flex;

@@ -19,6 +19,15 @@
     padding-bottom: 64px;
 }
 
+.search-empty {
+    flex-direction: column;
+    gap: 12px;
+}
+
+.search-empty svg {
+    color: #3a3a3a;
+}
+
 .search-results-heading {
     display: flex;
     align-items: center;

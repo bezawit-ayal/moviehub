@@ -1,29 +1,12 @@
 .app-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
+/* Pages stretch so short pages still push the footer to the bottom. */
 
 main {
-  flex: 1;
-  padding: 48px 0;
-}
-
-main h1 {
-  font-size: 40px;
-  margin-bottom: 16px;
-}
-
-main p {
-  color: var(--text-secondary);
-}
-
-@media (max-width: 768px) {
-  main {
-    padding: 32px 0;
-  }
-
-  main h1 {
-    font-size: 32px;
-  }
+    flex: 1;
+    width: 100%;
 }

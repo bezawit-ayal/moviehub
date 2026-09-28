@@ -1,18 +1,32 @@
-.errorboundary-page {
+.nf-page {
     display: flex;
+
+    width: 100%;
+    min-height: 100vh;
 
     padding: var(--space-xl) 16px;
 
     text-align: center;
 }
 
-.errorboundary-content {
+.nf-inner {
     max-width: 520px;
-
     margin: auto;
 }
 
-.errorboundary-badge {
+.nf-code {
+    display: block;
+
+    font-size: clamp(64px, 12vw, 112px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -3px;
+
+    color: var(--surface-light);
+    -webkit-text-stroke: 1px var(--border);
+}
+
+.nf-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -20,16 +34,26 @@
     width: 52px;
     height: 52px;
 
-    margin-bottom: var(--space-md);
+    margin: calc(-1 * var(--space-md)) 0 var(--space-sm);
 
-    color: var(--danger);
+    color: var(--primary);
 
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 50%;
 }
 
-.errorboundary-title {
+.nf-label {
+    margin-bottom: var(--space-xs);
+
+    color: var(--primary);
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.nf-title {
     margin-bottom: var(--space-sm);
 
     font-size: clamp(28px, 5vw, 40px);
@@ -37,7 +61,7 @@
     letter-spacing: -1px;
 }
 
-.errorboundary-description {
+.nf-text {
     max-width: 440px;
 
     margin: 0 auto var(--space-lg);
@@ -47,7 +71,7 @@
     line-height: 1.6;
 }
 
-.errorboundary-actions {
+.nf-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -56,16 +80,17 @@
     gap: 12px;
 }
 
-.errorboundary-actions svg {
+.nf-button svg {
     flex-shrink: 0;
 }
 
 @media (max-width: 480px) {
-    .errorboundary-actions {
+    .nf-actions {
         flex-direction: column;
     }
 
-    .errorboundary-actions > * {
+    .nf-button {
         width: 100%;
+        justify-content: center;
     }
 }

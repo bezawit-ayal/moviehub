@@ -1,20 +1,24 @@
 import { Link } from 'react-router-dom';
-import { Clapperboard } from 'lucide-react';
+import { Clapperboard, ArrowUp } from 'lucide-react';
+import { useWatchlist } from '../hooks/usewatchlist';
 import './footer.css';
 
 const BROWSE_LINKS = [
     { label: 'Home', to: '/' },
-    { label: 'Discover', to: '/discover' },
     { label: 'Search', to: '/search' },
 ];
 
 function Footer() {
     const year = new Date().getFullYear();
 
+    const { count } = useWatchlist();
+
+    const scrollToTop = () =>
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
     return (
         <footer className="footer">
             <div className="footer-container container">
-
                 <div className="footer-top">
                     <div className="footer-brand">
                         <Link to="/" className="footer-logo">
@@ -23,9 +27,18 @@ function Footer() {
 
                         <p className="footer-tagline">
                             <Clapperboard size={15} />
-                            Discover trending, popular and top rated movies
-                            all in one place.
+                            Discover trending, popular and top rated
+                            movies all in one place.
                         </p>
+
+                        <button
+                            type="button"
+                            className="footer-top-button"
+                            onClick={scrollToTop}
+                        >
+                            <ArrowUp size={14} />
+                            Back to top
+                        </button>
                     </div>
 
                     <div className="footer-column">
@@ -37,6 +50,27 @@ function Footer() {
                                     <Link to={to}>{label}</Link>
                                 </li>
                             ))}
+
+                            <li>
+                                <Link to="/watchlist">
+                                    Watchlist
+                                    {count > 0 && (
+                                        <span className="footer-count">
+                                            {count}
+                                        </span>
+                                    )}
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div className="footer-column">
+                        <h3 className="footer-heading">MovieHub</h3>
+
+                        <ul className="footer-links footer-links--static">
+                            <li>Built with React and Vite</li>
+                            <li>Data provided by TMDB</li>
+                            <li>No account needed</li>
                         </ul>
                     </div>
                 </div>
@@ -47,10 +81,10 @@ function Footer() {
                     </p>
 
                     <p className="footer-credit">
-                        Built by Mehari &amp; Bezawit
+                        This product uses the TMDB API but is not
+                        endorsed or certified by TMDB.
                     </p>
                 </div>
-
             </div>
         </footer>
     );

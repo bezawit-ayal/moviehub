@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history, so a secret committed in an earlier commit is
+          # still found. A shallow clone would hide it.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+        env:
+          # Placeholder only. Real keys must never enter CI; this just
+          # proves the build does not require one to succeed.
+          VITE_TMDB_API_KEY: ci-placeholder
+
+  secrets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Block committed secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Block .env and build output
+        run: |
+          if git log --all --name-only --pretty=format: | grep -qx '\.env'; then
+            echo "::error::.env is committed in git history. Revoke the key, then purge history."
+            exit 1
+          fi
+          for dir in dist dist-ssr; do
+            if git ls-files --error-unmatch "$dir" >/dev/null 2>&1; then
+              echo "::error::$dir is tracked in git but should be git-ignored"
+              exit 1
+            fi
+          done
+          echo "No .env or build output in history."

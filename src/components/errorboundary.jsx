@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import './errorboundary.css';
 
 class ErrorBoundary extends Component {
@@ -21,31 +22,40 @@ class ErrorBoundary extends Component {
             return (
                 <main className="errorboundary-page">
                     <div className="errorboundary-content">
+                        <span
+                            className="errorboundary-badge"
+                            aria-hidden="true"
+                        >
+                            <AlertTriangle size={28} />
+                        </span>
+
                         <p className="section-label">
                             SOMETHING WENT WRONG
                         </p>
 
-                        <h1>Unexpected error</h1>
 
                         <p className="errorboundary-description">
-                            The page crashed while rendering. Reloading
-                            usually fixes it.
+                            The page crashed while rendering. please Reload and try it again.
                         </p>
 
-                        <button
-                            type="button"
-                            className="primary-button"
-                            onClick={() => window.location.reload()}
-                        >
-                            Reload
-                        </button>
+                        <div className="errorboundary-actions">
+                            <button
+                                type="button"
+                                className="primary-button"
+                                onClick={() => window.location.reload()}
+                            >
+                                <RefreshCw size={16} />
+                                Reload
+                            </button>
 
-                        <Link
-                            to="/"
-                            className="errorboundary-link"
-                        >
-                            or go back home
-                        </Link>
+                            <Link
+                                to="/"
+                                className="secondary-button"
+                            >
+                                <Home size={16} />
+                                Back to Home
+                            </Link>
+                        </div>
                     </div>
                 </main>
             );

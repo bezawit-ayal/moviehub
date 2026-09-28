@@ -1,132 +1,132 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { SearchX } from 'lucide-react';
 import { searchMovies } from '../services/tmdbapi';
+import { useDocumentTitle } from '../hooks/usedocumenttitle';
 import MovieGrid from '../components/moviegrid';
 import SearchBar from '../components/searchbar';
-import './search.css';
 import SkeletonGrid from '../components/skeletongrid';
-function Search() {
+import './search.css';
+
+const MAX_PAGES = 500;
+
+const formatCount = (count) => count.toLocaleString('en-US');
+
+/**
+ * Remounted by <Search> whenever the query changes, so the input starts
+ * from the URL and stale results never survive a new search.
+ */
+function SearchView() {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [query, setQuery] = useState(
-        searchParams.get('query') || ''
-    );
-
-    const [movies, setMovies] = useState([]);
-    const [page, setPage] = useState(
+    const currentQuery = searchParams.get('query') || '';
+    const currentPage = Math.max(
+        1,
         Number(searchParams.get('page')) || 1
     );
 
-    const [totalPages, setTotalPages] = useState(1);
+    const [inputValue, setInputValue] = useState(currentQuery);
 
-    const [loading, setLoading] = useState(false);
+    const [movies, setMovies] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalResults, setTotalResults] = useState(0);
+
+    const [loading, setLoading] = useState(Boolean(currentQuery));
     const [error, setError] = useState('');
 
-    const currentQuery = searchParams.get('query');
+    useDocumentTitle(currentQuery ? `Search: ${currentQuery}` : 'Search');
 
     useEffect(() => {
+        if (!currentQuery) {
+            return undefined;
+        }
+
+        const controller = new AbortController();
+
         const loadSearchResults = async () => {
-            if (!currentQuery) {
-                setMovies([]);
-                setTotalPages(1);
-                return;
-            }
+            setLoading(true);
+            setError('');
 
             try {
-                setLoading(true);
-                setError('');
-
                 const data = await searchMovies(
                     currentQuery,
-                    page
+                    currentPage,
+                    { signal: controller.signal }
                 );
 
                 setMovies(data.results || []);
                 setTotalPages(
-                    Math.min(data.total_pages || 1, 500)
+                    Math.min(data.total_pages || 1, MAX_PAGES)
                 );
-            } catch (error) {
-                console.error(error);
+                setTotalResults(data.total_results || 0);
+            } catch {
+                if (controller.signal.aborted) {
+                    return;
+                }
 
-                setError(
-                    'Unable to search movies. Please try again.'
-                );
-
+                setError('Unable to search movies. Please try again.');
                 setMovies([]);
+                setTotalResults(0);
             } finally {
-                setLoading(false);
+                if (!controller.signal.aborted) {
+                    setLoading(false);
+                }
             }
         };
 
         loadSearchResults();
-    }, [currentQuery, page]);
+
+        return () => controller.abort();
+    }, [currentQuery, currentPage]);
 
     const handleSearch = (event) => {
         event.preventDefault();
 
-        const searchQuery = query.trim();
+        const searchQuery = inputValue.trim();
 
         if (!searchQuery) {
             return;
         }
 
-        setPage(1);
-
-        setSearchParams({
-            query: searchQuery,
-            page: '1',
-        });
+        setSearchParams({ query: searchQuery, page: '1' });
     };
 
     const changePage = (newPage) => {
-        if (
-            newPage < 1 ||
-            newPage > totalPages ||
-            loading
-        ) {
+        if (newPage < 1 || newPage > totalPages || loading) {
             return;
         }
-
-        setPage(newPage);
 
         setSearchParams({
             query: currentQuery,
             page: String(newPage),
         });
 
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
+    const hasResults = movies.length > 0;
 
     return (
         <main className="search-page">
             <div className="container">
-
                 <section className="search-header">
-                    <p className="section-label">
-                        MOVIE SEARCH
-                    </p>
+                    <p className="section-label">MOVIE SEARCH</p>
 
                     <h1>Find Your Next Movie</h1>
 
                     <p className="search-description">
-                        Search for your favorite movies.
+                        Search thousands of movies by title.
                     </p>
 
                     <SearchBar
-                        value={query}
-                        onChange={setQuery}
+                        value={inputValue}
+                        onChange={setInputValue}
                         onSubmit={handleSearch}
                     />
                 </section>
 
                 <section className="search-results">
-
-                    {loading && (
-                        <SkeletonGrid count={10} />
-                    )}
+                    {loading && <SkeletonGrid count={10} />}
 
                     {error && (
                         <div className="search-status search-error">
@@ -134,72 +134,93 @@ function Search() {
                         </div>
                     )}
 
-                    {!loading &&
-                        !error &&
-                        currentQuery && (
-                            <>
-                                <div className="search-results-heading">
-                                    <div>
-                                        <h2>
-                                            Results for "{currentQuery}"
-                                        </h2>
+                    {!currentQuery && (
+                        <div className="search-empty">
+                            <p>Type a title above to see results.</p>
+                        </div>
+                    )}
 
-                                        <span>
-                                            Page {page} of {totalPages}
-                                        </span>
-                                    </div>
+                    {currentQuery && !loading && !error && !hasResults && (
+                        <div className="search-empty">
+                            <SearchX size={28} />
+                            <p>
+                                No movies match &quot;{currentQuery}&quot;.
+                            </p>
+                        </div>
+                    )}
+
+                    {hasResults && !loading && !error && (
+                        <>
+                            <div className="search-results-heading">
+                                <div>
+                                    <h2>
+                                        Results for &quot;{currentQuery}&quot;
+                                    </h2>
+
+                                    <span>
+                                        {formatCount(totalResults)}{' '}
+                                        {totalResults === 1
+                                            ? 'movie'
+                                            : 'movies'}
+                                    </span>
                                 </div>
-
-                                <MovieGrid movies={movies} />
-
-                                {totalPages > 1 && (
-                                    <div className="pagination">
-
-                                        <button
-                                            type="button"
-                                            className="pagination-button"
-                                            disabled={page === 1}
-                                            onClick={() =>
-                                                changePage(page - 1)
-                                            }
-                                        >
-                                            Previous
-                                        </button>
-
-                                        <span className="pagination-info">
-                                            Page {page} of {totalPages}
-                                        </span>
-
-                                        <button
-                                            type="button"
-                                            className="pagination-button"
-                                            disabled={page === totalPages}
-                                            onClick={() =>
-                                                changePage(page + 1)
-                                            }
-                                        >
-                                            Next
-                                        </button>
-
-                                    </div>
-                                )}
-                            </>
-                        )}
-
-                    {!loading &&
-                        !error &&
-                        !currentQuery && (
-                            <div className="search-empty">
-                                <p>
-                                    Search for a movie to see results.
-                                </p>
                             </div>
-                        )}
 
+                            <MovieGrid movies={movies} />
+
+                            {totalPages > 1 && (
+                                <div className="pagination">
+                                    <button
+                                        type="button"
+                                        className="pagination-button"
+                                        disabled={
+                                            loading ||
+                                            currentPage === 1
+                                        }
+                                        onClick={() =>
+                                            changePage(
+                                                currentPage - 1
+                                            )
+                                        }
+                                    >
+                                        Previous
+                                    </button>
+
+                                    <span className="pagination-info">
+                                        Page {currentPage} of {totalPages}
+                                    </span>
+
+                                    <button
+                                        type="button"
+                                        className="pagination-button"
+                                        disabled={
+                                            loading ||
+                                            currentPage === totalPages
+                                        }
+                                        onClick={() =>
+                                            changePage(
+                                                currentPage + 1
+                                            )
+                                        }
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </section>
             </div>
         </main>
     );
+}
+
+function Search() {
+    const [searchParams] = useSearchParams();
+
+    const query = searchParams.get('query') || '';
+
+    return <SearchView key={query} />;
 }
 
 export default Search;

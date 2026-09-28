@@ -1,0 +1,72 @@
+.watchlist-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.watchlist-button svg {
+    flex-shrink: 0;
+}
+
+/* Icon (used as an overlay on cards and heroes) */
+
+.watchlist-button--icon {
+    width: 34px;
+    height: 34px;
+
+    background: rgba(15, 15, 15, 0.72);
+    color: var(--text-primary);
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 50%;
+
+    backdrop-filter: blur(6px);
+}
+
+.watchlist-button--icon:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.08);
+}
+
+.watchlist-button--icon[aria-pressed='true'] {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Label (used on the hero and the detail page) */
+
+.watchlist-button--label {
+    height: 44px;
+
+    gap: 8px;
+
+    padding: 0 18px;
+
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius-sm);
+
+    font-size: 14px;
+}
+
+.watchlist-button--label:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.watchlist-button--label[aria-pressed='true'] {
+    color: var(--primary);
+    border-color: var(--primary);
+}
