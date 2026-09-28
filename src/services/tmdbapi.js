@@ -62,7 +62,9 @@ const fetchFromTMDB = async (endpoint, { signal } = {}) => {
     }
 
     if (!response.ok) {
-        throw new Error(`TMDB request failed: ${response.status}`);
+        throw new Error(
+            `TMDB request failed: ${response.status}`
+        );
     }
 
     return response.json();
