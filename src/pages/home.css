@@ -151,3 +151,12 @@
         font-size: 11px;
     }
 }
+
+.recently-viewed {
+    padding: 48px 0;
+}
+
+.recently-viewed h2 {
+    font-size: 28px;
+    margin-bottom: 24px;
+}

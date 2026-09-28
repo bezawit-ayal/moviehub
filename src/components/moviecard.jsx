@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Star } from 'lucide-react';
 import './moviecard.css';
 
@@ -12,40 +13,50 @@ function MovieCard({ movie }) {
         ? movie.release_date.substring(0, 4)
         : 'N/A';
 
-    const rating = movie.vote_average
-        ? movie.vote_average.toFixed(1)
-        : 'N/A';
+    const rating =
+        movie.vote_average !== undefined &&
+            movie.vote_average !== null
+            ? movie.vote_average.toFixed(1)
+            : 'N/A';
 
     return (
         <article className="movie-card">
-            <div className="movie-card-poster">
-                {poster ? (
-                    <img
-                        src={poster}
-                        alt={movie.title}
-                        loading="lazy"
-                    />
-                ) : (
-                    <div className="movie-card-placeholder">
-                        No Image
-                    </div>
-                )}
-            </div>
-
-            <div className="movie-card-content">
-                <h3 className="movie-card-title">
-                    {movie.title}
-                </h3>
-
-                <div className="movie-card-meta">
-                    <span className="movie-rating">
-                        <Star size={14} fill="currentColor" />
-                        {rating}
-                    </span>
-
-                    <span>{releaseYear}</span>
+            <Link
+                to={`/movie/${movie.id}`}
+                className="movie-card-link"
+            >
+                <div className="movie-card-poster">
+                    {poster ? (
+                        <img
+                            src={poster}
+                            alt={movie.title}
+                            loading="lazy"
+                        />
+                    ) : (
+                        <div className="movie-card-placeholder">
+                            No Image
+                        </div>
+                    )}
                 </div>
-            </div>
+
+                <div className="movie-card-content">
+                    <h3 className="movie-card-title">
+                        {movie.title}
+                    </h3>
+
+                    <div className="movie-card-meta">
+                        <span className="movie-rating">
+                            <Star
+                                size={14}
+                                fill="currentColor"
+                            />
+                            {rating}
+                        </span>
+
+                        <span>{releaseYear}</span>
+                    </div>
+                </div>
+            </Link>
         </article>
     );
 }

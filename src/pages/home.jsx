@@ -14,7 +14,6 @@ import SearchBar from '../components/searchbar';
 
 import './home.css';
 
-
 function MovieSection({
     label,
     title,
@@ -23,7 +22,6 @@ function MovieSection({
 }) {
     return (
         <section className="home-section">
-
             <div className="section-heading">
                 <div>
                     <p className="section-label">
@@ -39,14 +37,11 @@ function MovieSection({
             ) : (
                 <MovieGrid movies={movies} />
             )}
-
         </section>
     );
 }
 
-
 function Home() {
-
     const navigate = useNavigate();
 
     const [trending, setTrending] = useState([]);
@@ -69,13 +64,9 @@ function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-
     useEffect(() => {
-
         const loadMovies = async () => {
-
             try {
-
                 setLoading(true);
                 setError('');
 
@@ -106,29 +97,21 @@ function Home() {
                 setUpcoming(
                     upcomingData.results || []
                 );
-
             } catch (err) {
-
                 console.error(err);
 
                 setError(
                     'Unable to load movies. Please try again.'
                 );
-
             } finally {
-
                 setLoading(false);
-
             }
         };
 
         loadMovies();
-
     }, []);
 
-
     const handleSearch = (event) => {
-
         event.preventDefault();
 
         const search = searchQuery.trim();
@@ -158,9 +141,7 @@ function Home() {
         );
     };
 
-
     const handleRecentSearch = (search) => {
-
         setSearchQuery(search);
 
         navigate(
@@ -168,9 +149,7 @@ function Home() {
         );
     };
 
-
     const clearRecentSearches = () => {
-
         setRecentSearches([]);
 
         localStorage.removeItem(
@@ -178,29 +157,23 @@ function Home() {
         );
     };
 
-
     if (error) {
-
         return (
             <main className="home-page">
-
                 <div className="container">
-
                     <div className="home-status home-error">
                         {error}
                     </div>
-
                 </div>
-
             </main>
         );
     }
 
-
     return (
         <main className="home-page">
-
             <div className="container">
+
+                {/* Search */}
 
                 <section className="home-search-section">
                     <SearchBar
@@ -209,34 +182,47 @@ function Home() {
                         onSubmit={handleSearch}
                     />
 
+                    {/* Recent Searches */}
+
                     {recentSearches.length > 0 && (
                         <div className="home-recent-searches">
+
                             <div className="home-recent-header">
-                                <h3>Recent Searches</h3>
+                                <h3>
+                                    Recent Searches
+                                </h3>
 
                                 <button
                                     type="button"
-                                    onClick={clearRecentSearches}
+                                    onClick={
+                                        clearRecentSearches
+                                    }
                                 >
                                     Clear
                                 </button>
                             </div>
 
                             <div className="home-recent-list">
-                                {recentSearches.map((search) => (
-                                    <button
-                                        key={search}
-                                        type="button"
-                                        onClick={() => handleRecentSearch(search)}
-                                    >
-                                        {search}
-                                    </button>
-                                ))}
+                                {recentSearches.map(
+                                    (search) => (
+                                        <button
+                                            key={search}
+                                            type="button"
+                                            onClick={() =>
+                                                handleRecentSearch(
+                                                    search
+                                                )
+                                            }
+                                        >
+                                            {search}
+                                        </button>
+                                    )
+                                )}
                             </div>
+
                         </div>
                     )}
                 </section>
-
 
                 {/* Trending */}
 
@@ -247,7 +233,6 @@ function Home() {
                     loading={loading}
                 />
 
-
                 {/* Popular */}
 
                 <MovieSection
@@ -257,7 +242,6 @@ function Home() {
                     loading={loading}
                 />
 
-
                 {/* Top Rated */}
 
                 <MovieSection
@@ -266,7 +250,6 @@ function Home() {
                     movies={topRated}
                     loading={loading}
                 />
-
 
                 {/* Upcoming */}
 
@@ -278,10 +261,8 @@ function Home() {
                 />
 
             </div>
-
         </main>
     );
 }
-
 
 export default Home;

@@ -3,14 +3,18 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 const fetchFromTMDB = async (endpoint) => {
-    const separator = endpoint.includes('?') ? '&' : '?';
+    const separator = endpoint.includes('?')
+        ? '&'
+        : '?';
 
     const response = await fetch(
         `${BASE_URL}${endpoint}${separator}api_key=${API_KEY}`
     );
 
     if (!response.ok) {
-        throw new Error(`TMDB request failed: ${response.status}`);
+        throw new Error(
+            `TMDB request failed: ${response.status}`
+        );
     }
 
     return response.json();
@@ -28,9 +32,14 @@ export const getTopRatedMovies = () =>
 export const getUpcomingMovies = () =>
     fetchFromTMDB('/movie/upcoming');
 
-export const searchMovies = (query, page = 1) =>
+export const searchMovies = (
+    query,
+    page = 1
+) =>
     fetchFromTMDB(
-        `/search/movie?query=${encodeURIComponent(query)}&page=${page}&include_adult=false`
+        `/search/movie?query=${encodeURIComponent(
+            query
+        )}&page=${page}&include_adult=false`
     );
 
 export const getMovieGenres = () =>
@@ -60,3 +69,8 @@ export const getMoviesByGenre = (
 
     return fetchFromTMDB(endpoint);
 };
+
+export const getMovieDetails = (movieId) =>
+    fetchFromTMDB(
+        `/movie/${movieId}?append_to_response=videos`
+    );

@@ -7,7 +7,8 @@ import {
 
 import MovieGrid from '../components/moviegrid';
 import SkeletonGrid from '../components/skeletongrid';
-
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import './discover.css';
 
 function Discover() {
@@ -133,7 +134,10 @@ function Discover() {
             <div className="container">
 
                 <section className="discover-header">
-
+                    <Link to="/" className="back-button">
+                        <ArrowLeft size={18} />
+                        Back to Home
+                    </Link>
                     <p className="section-label">
                         DISCOVER
                     </p>
