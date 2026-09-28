@@ -61,3 +61,93 @@
         font-size: 21px;
     }
 }
+
+.home-search-section {
+    padding: 32px 0 16px;
+}
+
+.home-search-section .search-bar {
+    margin: 0 auto;
+}
+
+.home-recent-searches {
+    width: 100%;
+    max-width: 760px;
+    margin: 14px auto 0;
+}
+
+.home-recent-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.home-recent-header h3 {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.home-recent-header button {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.home-recent-header button:hover {
+    color: var(--primary);
+}
+
+.home-recent-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.home-recent-list button {
+    padding: 7px 11px;
+
+    background: var(--surface);
+    color: var(--text-secondary);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    font-size: 12px;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.home-recent-list button:hover {
+    background: var(--surface-light);
+    color: var(--text-primary);
+    border-color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .home-search-section {
+        padding: 24px 0 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-search-section {
+        padding: 20px 0 10px;
+    }
+
+    .home-recent-searches {
+        margin-top: 12px;
+    }
+
+    .home-recent-list button {
+        padding: 6px 9px;
+        font-size: 11px;
+    }
+}

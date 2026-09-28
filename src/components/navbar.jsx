@@ -1,12 +1,10 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Search, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 import './navbar.css';
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [searchOpen, setSearchOpen] = useState(false);
-    const [query, setQuery] = useState('');
 
     const navigate = useNavigate();
 
@@ -56,36 +54,6 @@ function Navbar() {
                 </nav>
 
                 <div className="navbar-actions">
-
-                    {searchOpen && (
-                        <form
-                            className="navbar-search"
-                            onSubmit={handleSearch}
-                        >
-                            <Search size={18} />
-
-                            <input
-                                type="text"
-                                value={query}
-                                onChange={(event) => setQuery(event.target.value)}
-                                placeholder="Search movies..."
-                                autoFocus
-                            />
-
-                            <button type="submit">
-                                Search
-                            </button>
-                        </form>
-                    )}
-
-                    <button
-                        type="button"
-                        className="search-icon-button"
-                        onClick={() => setSearchOpen(!searchOpen)}
-                        aria-label="Search movies"
-                    >
-                        {searchOpen ? <X size={20} /> : <Search size={20} />}
-                    </button>
 
                     <button
                         type="button"

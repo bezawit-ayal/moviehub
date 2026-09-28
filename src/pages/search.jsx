@@ -3,8 +3,9 @@ import { useSearchParams } from 'react-router-dom';
 import { searchMovies } from '../services/tmdbapi';
 import MovieGrid from '../components/moviegrid';
 import SearchBar from '../components/searchbar';
-import './search.css';
 import SkeletonGrid from '../components/skeletongrid';
+import './search.css';
+
 function Search() {
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -13,16 +14,77 @@ function Search() {
     );
 
     const [movies, setMovies] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
     const [page, setPage] = useState(
         Number(searchParams.get('page')) || 1
     );
 
     const [totalPages, setTotalPages] = useState(1);
 
+    const [recentSearches, setRecentSearches] = useState(() => {
+        const savedSearches =
+            localStorage.getItem('moviehub-recent-searches');
+
+        return savedSearches
+            ? JSON.parse(savedSearches)
+            : [];
+    });
+    const handleSuggestionClick = (movie) => {
+        const search = movie.title;
+
+        setQuery(search);
+        setSuggestions([]);
+
+        const updatedSearches = [
+            search,
+            ...recentSearches.filter(
+                (item) =>
+                    item.toLowerCase() !== search.toLowerCase()
+            ),
+        ].slice(0, 5);
+
+        setRecentSearches(updatedSearches);
+
+        localStorage.setItem(
+            'moviehub-recent-searches',
+            JSON.stringify(updatedSearches)
+        );
+
+        setPage(1);
+
+        setSearchParams({
+            query: search,
+            page: '1',
+        });
+    };
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const currentQuery = searchParams.get('query');
+
+    useEffect(() => {
+        const getSuggestions = async () => {
+            const search = query.trim();
+
+            if (search.length < 2) {
+                setSuggestions([]);
+                return;
+            }
+
+            try {
+                const data = await searchMovies(search, 1);
+
+                setSuggestions((data.results || []).slice(0, 5));
+            } catch (error) {
+                console.error(error);
+                setSuggestions([]);
+            }
+        };
+
+        const timer = setTimeout(getSuggestions, 300);
+
+        return () => clearTimeout(timer);
+    }, [query]);
 
     useEffect(() => {
         const loadSearchResults = async () => {
@@ -42,6 +104,7 @@ function Search() {
                 );
 
                 setMovies(data.results || []);
+
                 setTotalPages(
                     Math.min(data.total_pages || 1, 500)
                 );
@@ -70,12 +133,46 @@ function Search() {
             return;
         }
 
+        const updatedSearches = [
+            searchQuery,
+            ...recentSearches.filter(
+                (item) =>
+                    item.toLowerCase() !==
+                    searchQuery.toLowerCase()
+            ),
+        ].slice(0, 5);
+
+        setRecentSearches(updatedSearches);
+
+        localStorage.setItem(
+            'moviehub-recent-searches',
+            JSON.stringify(updatedSearches)
+        );
+
         setPage(1);
 
         setSearchParams({
             query: searchQuery,
             page: '1',
         });
+    };
+
+    const handleRecentSearch = (search) => {
+        setQuery(search);
+        setPage(1);
+
+        setSearchParams({
+            query: search,
+            page: '1',
+        });
+    };
+
+    const clearRecentSearches = () => {
+        setRecentSearches([]);
+
+        localStorage.removeItem(
+            'moviehub-recent-searches'
+        );
     };
 
     const changePage = (newPage) => {
@@ -103,23 +200,42 @@ function Search() {
     return (
         <main className="search-page">
             <div className="container">
-
                 <section className="search-header">
-                    <p className="section-label">
-                        MOVIE SEARCH
-                    </p>
-
-                    <h1>Find Your Next Movie</h1>
-
-                    <p className="search-description">
-                        Search for your favorite movies.
-                    </p>
-
                     <SearchBar
                         value={query}
                         onChange={setQuery}
                         onSubmit={handleSearch}
+                        suggestions={suggestions}
+                        onSuggestionClick={handleSuggestionClick}
                     />
+
+                    {recentSearches.length > 0 && (
+                        <div className="recent-searches">
+                            <div className="recent-searches-header">
+                                <h3>Recent Searches</h3>
+
+                                <button
+                                    type="button"
+                                    onClick={clearRecentSearches}
+                                >
+                                    Clear
+                                </button>
+                            </div>
+
+                            <div className="recent-search-list">
+                                {recentSearches.map((search) => (
+                                    <button
+                                        key={search}
+                                        type="button"
+                                        className="recent-search-item"
+                                        onClick={() => handleRecentSearch(search)}
+                                    >
+                                        {search}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </section>
 
                 <section className="search-results">
@@ -173,7 +289,9 @@ function Search() {
                                         <button
                                             type="button"
                                             className="pagination-button"
-                                            disabled={page === totalPages}
+                                            disabled={
+                                                page === totalPages
+                                            }
                                             onClick={() =>
                                                 changePage(page + 1)
                                             }

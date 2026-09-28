@@ -2,21 +2,24 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+
     width: 100%;
+
     background: rgba(15, 15, 15, 0.96);
     border-bottom: 1px solid var(--border);
+
     backdrop-filter: blur(10px);
 }
 
 .navbar-container {
     width: min(1200px, calc(100% - 32px));
     min-height: 72px;
+
     margin: 0 auto;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 32px;
 }
 
 .navbar-logo {
@@ -35,13 +38,17 @@
     align-items: center;
     gap: 32px;
     margin-left: auto;
+    margin-right: 24px;
 }
 
 .navbar-links a {
     position: relative;
+
     color: var(--text-secondary);
+
     font-size: 14px;
     font-weight: 500;
+
     transition: color 0.2s ease;
 }
 
@@ -59,28 +66,14 @@
     bottom: -8px;
 
     height: 2px;
+
     background: var(--primary);
     border-radius: 2px;
 }
 
-.desktop-search {
-    width: 40px;
-    height: 40px;
-
+.navbar-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    color: var(--text-primary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-
-    transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.desktop-search:hover {
-    background: var(--surface-light);
-    border-color: var(--primary);
 }
 
 .menu-button {
@@ -94,11 +87,23 @@
 
     background: transparent;
     color: var(--text-primary);
+
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
-/* Tablet */
+.menu-button:hover {
+    background: var(--surface-light);
+    border-color: var(--primary);
+}
+
+
+/* Tablet and Mobile */
+
 @media (max-width: 768px) {
     .navbar-container {
         min-height: 64px;
@@ -109,15 +114,15 @@
 
         top: 64px;
         right: 12px;
-        left: auto;
 
         width: 220px;
 
         display: none;
         flex-direction: column;
         align-items: stretch;
-        gap: 0;
 
+        gap: 0;
+        margin: 0;
         padding: 8px;
 
         background: var(--surface);
@@ -150,7 +155,9 @@
     }
 }
 
-/* Mobile */
+
+/* Small Mobile */
+
 @media (max-width: 480px) {
     .navbar-container {
         width: calc(100% - 24px);
@@ -158,149 +165,5 @@
 
     .navbar-logo {
         font-size: 22px;
-    }
-}
-
-.navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.search-icon-link {
-    width: 40px;
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: var(--text-primary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
-}
-
-.search-icon-link:hover {
-    background: var(--surface-light);
-    border-color: var(--primary);
-}
-
-.navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.search-icon-button {
-    width: 40px;
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: transparent;
-    color: var(--text-primary);
-
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-
-    transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.search-icon-button:hover {
-    background: var(--surface-light);
-    border-color: var(--primary);
-}
-
-.navbar-search {
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    padding-left: 12px;
-
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-
-    overflow: hidden;
-}
-
-.navbar-search:focus-within {
-    border-color: var(--primary);
-}
-
-.navbar-search svg {
-    color: var(--text-secondary);
-    flex-shrink: 0;
-}
-
-.navbar-search input {
-    width: 180px;
-
-    background: transparent;
-    color: var(--text-primary);
-
-    border: none;
-    outline: none;
-}
-
-.navbar-search input::placeholder {
-    color: var(--text-secondary);
-}
-
-.navbar-search button {
-    height: 40px;
-
-    padding: 0 14px;
-
-    background: var(--primary);
-    color: white;
-
-    border: none;
-
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.navbar-search button:hover {
-    background: var(--primary-hover);
-}
-
-@media (max-width: 768px) {
-    .navbar-search {
-        position: absolute;
-        top: 64px;
-        left: 12px;
-        right: 12px;
-
-        width: auto;
-
-        height: 48px;
-
-        padding-left: 14px;
-
-        background: var(--surface);
-    }
-
-    .navbar-search input {
-        width: 100%;
-    }
-
-    .navbar-search button {
-        height: 48px;
     }
 }
