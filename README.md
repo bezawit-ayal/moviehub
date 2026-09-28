@@ -1,16 +1,71 @@
-# React + Vite
+# MovieHub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+MovieHub is a responsive movie discovery web application built with React and the TMDB API.
 
-Currently, two official plugins are available:
+It allows users to discover movies, search for specific titles, explore movie details, manage a personal watchlist, and watch available movie trailers.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Browse trending movies
+- Explore popular movies
+- View top-rated movies
+- Discover upcoming movies
+- Search for movies
+- Filter movies by genre
+- Filter movies by release year
+- Filter movies by rating
+- View detailed movie information
+- View movie ratings, genres, runtime, and overview
+- Watch available movie trailers
+- Add movies to a personal watchlist
+- Remove movies from the watchlist
+- Recent search history
+- Responsive design for desktop, tablet, and mobile
+- Loading states and error handling
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React
+- JavaScript
+- React Router
+- Vite
+- TMDB API
+- CSS
+- Lucide React
+- LocalStorage
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+
+```text
+MovieHub/
+│
+├── public/
+│
+├── src/
+│   ├── assets/
+│   │
+│   ├── components/
+│   │   ├── moviecard.jsx
+│   │   ├── moviegrid.jsx
+│   │   ├── searchbar.jsx
+│   │   └── skeletongrid.jsx
+│   │
+│   ├── pages/
+│   │   ├── home.jsx
+│   │   ├── search.jsx
+│   │   ├── discover.jsx
+│   │   ├── moviedetails.jsx
+│   │   └── watchlist.jsx
+│   │
+│   ├── services/
+│   │   └── tmdbapi.js
+│   │
+│   ├── app.jsx
+│   ├── app.css
+│   └── main.jsx
+│
+├── .env.example
+├── .gitignore
+├── index.html
+├── package.json
+└── README.md
